@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Learning Website{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">My Dashboard</h1>
+    <p class="text-gray-600">Track your progress and continue learning.</p>
+</div>
+
+{% if courses_progress %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for course_data in courses_progress %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                {% if course_data.course.image %}
+                    <img src="{{ course_data.course.image.url }}" alt="{{ course_data.course.title }}" class="w-full h-48 object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500">No Image</span>
+                    </div>
+                {% endif %}
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">{{ course_data.course.title }}</h3>
+                    <p class="text-gray-600 mb-4">{{ course_data.course.description|truncatewords:20 }}</p>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Progress</span>
+                            <span class="text-sm font-medium text-gray-700">{{ course_data.progress }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ course_data.progress }}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">{{ course_data.completed_lessons }} of {{ course_data.total_lessons }} lessons completed</p>
+                    </div>
+                    
+                    <a href="{% url 'learning_content:course_detail' course_data.course.slug %}" class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-md font-semibold">
+                        {% if course_data.progress == 100 %}
+                            Review Course
+                        {% else %}
+                            Continue Learning
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="bg-white rounded-lg shadow-md p-8 text-center">
+        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">No courses in progress</h2>
+        <p class="text-gray-600 mb-6">You haven't started any courses yet. Browse our catalog to find something you'd like to learn.</p>
+        <a href="{% url 'learning_content:course_list' %}" class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-md font-semibold">
+            Browse Courses
+        </a>
+    </div>
+{% endif %}
+
+<!-- Recommended Courses -->
+<div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Recommended For You</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for course in recommended_courses %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transition transform hover:-translate-y-1 hover:shadow-lg">
+                {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}" class="w-full h-40 object-cover">
+                {% else %}
+                    <div class="w-full h-40 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500">No Image</span>
+                    </div>
+                {% endif %}
+                <div class="p-4">
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-semibold mb-2">{{ course.get_level_display }}</span>
+                    <h3 class="text-lg font-bold mb-2">{{ course.title }}</h3>
+                    <a href="{% url 'learning_content:course_detail' course.slug %}" class="text-blue-600 hover:text-blue-800 transition font-semibold text-sm">
+                        View Course
+                        <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-span-3 text-center py-4">
+                <p class="text-gray-500">No recommended courses available at the moment.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

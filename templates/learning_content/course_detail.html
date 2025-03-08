@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }} - Learning Website{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+    <div class="relative">
+        {% if course.image %}
+            <img src="{{ course.image.url }}" alt="{{ course.title }}" class="w-full h-64 md:h-80 object-cover">
+        {% else %}
+            <div class="w-full h-64 md:h-80 bg-gray-200 flex items-center justify-center">
+                <span class="text-gray-500 text-xl">No Image</span>
+            </div>
+        {% endif %}
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
+            <div class="flex items-center mb-2">
+                <span class="inline-block px-3 py-1 bg-blue-600 text-white rounded-full text-sm font-semibold mr-2">{{ course.get_level_display }}</span>
+                <span class="inline-block px-3 py-1 bg-gray-700 text-white rounded-full text-sm font-semibold">{{ course.category.name }}</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white">{{ course.title }}</h1>
+        </div>
+    </div>
+    
+    <div class="p-6">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">About This Course</h2>
+            <p class="text-gray-600">{{ course.description|safe }}</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Level</h3>
+                <p class="text-gray-600">{{ course.get_level_display }}</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Category</h3>
+                <p class="text-gray-600">{{ course.category.name }}</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Last Updated</h3>
+                <p class="text-gray-600">{{ course.updated_at|date:"F j, Y" }}</p>
+            </div>
+        </div>
+        
+        <!-- Course Resources Section -->
+        {% if course.resources.exists %}
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Course Resources</h2>
+            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                <ul class="divide-y divide-gray-200">
+                    {% for resource in course.resources.all %}
+                    <li class="p-4 hover:bg-gray-50">
+                        <a href="{{ resource.url }}" target="_blank" class="flex items-start">
+                            <div class="flex-shrink-0 mr-4">
+                                {% if resource.resource_type == 'pdf' %}
+                                    <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                {% elif resource.resource_type == 'code' %}
+                                    <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                {% elif resource.resource_type == 'exercise' %}
+                                    <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                                    </svg>
+                                {% elif resource.resource_type == 'video' %}
+                                    <svg class="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                                    </svg>
+                                {% elif resource.resource_type == 'link' %}
+                                    <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
+                                    </svg>
+                                {% else %}
+                                    <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">{{ resource.title }}</h3>
+                                <p class="text-sm text-gray-600">{{ resource.description }}</p>
+                                <span class="inline-block mt-1 text-xs font-medium text-blue-600">
+                                    {% if resource.resource_type == 'pdf' %}
+                                        PDF Document
+                                    {% elif resource.resource_type == 'code' %}
+                                        Code Sample
+                                    {% elif resource.resource_type == 'exercise' %}
+                                        Practice Exercise
+                                    {% elif resource.resource_type == 'video' %}
+                                        Video Tutorial
+                                    {% elif resource.resource_type == 'link' %}
+                                        External Link
+                                    {% else %}
+                                        Resource
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Key Points</h2>
+    
+    {% if key_points %}
+        <div class="space-y-6">
+            {% for key_point in key_points %}
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="bg-gray-50 p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">{{ key_point.title }}</h3>
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mt-2">{{ key_point.type }}</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Description:</h4>
+                            <p class="text-gray-600">{{ key_point.description }}</p>
+                        </div>
+                        
+                        {% if key_point.example %}
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Example:</h4>
+                            <div class="bg-gray-100 p-3 rounded-md">
+                                <pre><code class="text-sm text-gray-800">{{ key_point.example }}</code></pre>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if key_point.time_complexity %}
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Time Complexity:</h4>
+                            <p class="text-gray-600">{{ key_point.time_complexity }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if key_point.space_complexity %}
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Space Complexity:</h4>
+                            <p class="text-gray-600">{{ key_point.space_complexity }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if key_point.applications %}
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Applications:</h4>
+                            <p class="text-gray-600">{{ key_point.applications }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if key_point.exercise %}
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Exercise:</h4>
+                            <p class="text-gray-600">{{ key_point.exercise }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-8">
+            <p class="text-gray-500 text-lg">No key points available for this course yet.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Course Content</h2>
+    
+    {% if lessons %}
+        <div class="space-y-4">
+            {% for lesson in lessons %}
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="flex items-center justify-between p-4 {% if user_progress and lesson.id in user_progress %}bg-green-50{% else %}bg-white{% endif %}">
+                        <div class="flex items-center">
+                            <div class="mr-4 flex-shrink-0">
+                                {% if user_progress and lesson.id in user_progress %}
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                {% else %}
+                                    <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                        <span class="text-gray-600 font-semibold">{{ forloop.counter }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">{{ lesson.title }}</h3>
+                                {% if user_progress and lesson.id in user_progress %}
+                                    <span class="text-green-600 text-sm">Completed</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'learning_content:lesson_detail' course_slug=course.slug lesson_slug=lesson.slug %}" class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-md text-sm font-semibold">
+                                    {% if user_progress and lesson.id in user_progress %}
+                                        Review
+                                    {% else %}
+                                        Start
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}?next={% url 'learning_content:lesson_detail' course_slug=course.slug lesson_slug=lesson.slug %}" class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-md text-sm font-semibold">
+                                    Login to Start
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-8">
+            <p class="text-gray-500 text-lg">No lessons available for this course yet.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - Learning Website{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+    <div class="relative">
+        <div class="w-full h-64 md:h-80 bg-blue-600 flex items-center justify-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">About Our Learning Platform</h1>
+        </div>
+    </div>
+    
+    <div class="p-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Our Mission</h2>
+            <p class="text-gray-600 mb-8">
+                Our mission is to provide high-quality educational content that is accessible to everyone. We believe that education should be available to all, regardless of location or background. Our platform is designed to help learners of all levels develop new skills and advance their careers.
+            </p>
+            
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">What We Offer</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Comprehensive Courses</h3>
+                    <p class="text-gray-600">
+                        Our courses are designed by industry experts and cover a wide range of topics. Each course includes video lectures, reading materials, and interactive quizzes to ensure a complete learning experience.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Interactive Learning</h3>
+                    <p class="text-gray-600">
+                        We believe in learning by doing. Our platform includes interactive elements that allow you to practice what you've learned and get immediate feedback on your progress.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Progress Tracking</h3>
+                    <p class="text-gray-600">
+                        Keep track of your learning journey with our progress tracking system. See how far you've come and what you still need to learn to master a subject.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Community Support</h3>
+                    <p class="text-gray-600">
+                        Join a community of learners who are on the same journey as you. Share your experiences, ask questions, and get help when you need it.
+                    </p>
+                </div>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Our Team</h2>
+            <p class="text-gray-600 mb-8">
+                Our team consists of educators, developers, and industry professionals who are passionate about education and technology. We work together to create a platform that makes learning engaging, effective, and enjoyable.
+            </p>
+            
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Contact Us</h2>
+            <p class="text-gray-600 mb-4">
+                Have questions or feedback? We'd love to hear from you! Reach out to us at:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 mb-8">
+                <li>Email: info@learningwebsite.com</li>
+                <li>Phone: +1 (123) 456-7890</li>
+                <li>Address: 123 Education Street, Learning City, LC 12345</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="bg-gray-100 rounded-lg p-8 text-center">
+    <h2 class="text-3xl font-bold mb-4">Ready to Start Learning?</h2>
+    <p class="text-gray-600 mb-6 max-w-2xl mx-auto">Join thousands of students who are already learning and improving their skills on our platform.</p>
+    <a href="{% url 'learning_content:course_list' %}" class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-md font-semibold">Explore Our Courses</a>
+</div>
+{% endblock %} 

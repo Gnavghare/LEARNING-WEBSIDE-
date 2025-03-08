@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Learning Website{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles can go here */
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Header/Navigation -->
+    <header class="bg-blue-600 text-white shadow-md">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'learning_content:home' %}" class="text-2xl font-bold">Learning Website</a>
+            </div>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="{% url 'learning_content:home' %}" class="hover:text-blue-200 transition">Home</a>
+                <a href="{% url 'learning_content:course_list' %}" class="hover:text-blue-200 transition">Courses</a>
+                <a href="{% url 'learning_content:about' %}" class="hover:text-blue-200 transition">About</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'learning_content:dashboard' %}" class="hover:text-blue-200 transition">Dashboard</a>
+                    <a href="{% url 'logout' %}" class="hover:text-blue-200 transition">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-blue-200 transition">Login</a>
+                    <a href="{% url 'learning_content:register' %}" class="hover:text-blue-200 transition">Register</a>
+                {% endif %}
+            </div>
+            
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-700 pb-4 px-4">
+            <a href="{% url 'learning_content:home' %}" class="block py-2 hover:text-blue-200 transition">Home</a>
+            <a href="{% url 'learning_content:course_list' %}" class="block py-2 hover:text-blue-200 transition">Courses</a>
+            <a href="{% url 'learning_content:about' %}" class="block py-2 hover:text-blue-200 transition">About</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'learning_content:dashboard' %}" class="block py-2 hover:text-blue-200 transition">Dashboard</a>
+                <a href="{% url 'logout' %}" class="block py-2 hover:text-blue-200 transition">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="block py-2 hover:text-blue-200 transition">Login</a>
+                <a href="{% url 'learning_content:register' %}" class="block py-2 hover:text-blue-200 transition">Register</a>
+            {% endif %}
+        </div>
+    </header>
+    
+    <!-- Messages/Notifications -->
+    {% if messages %}
+    <div class="container mx-auto px-4 mt-4">
+        {% for message in messages %}
+            <div class="p-4 mb-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'info' %}bg-blue-100 text-blue-700{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-700{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Learning Website</h3>
+                    <p class="text-gray-300">A platform for learning and growing your skills.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'learning_content:home' %}" class="text-gray-300 hover:text-white transition">Home</a></li>
+                        <li><a href="{% url 'learning_content:course_list' %}" class="text-gray-300 hover:text-white transition">Courses</a></li>
+                        <li><a href="{% url 'learning_content:about' %}" class="text-gray-300 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+                    <p class="text-gray-300">Email: info@learningwebsite.com</p>
+                    <p class="text-gray-300">Phone: +1 (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
+                <p>&copy; {% now "Y" %} Learning Website. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
